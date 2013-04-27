@@ -9,8 +9,6 @@
         <meta name="robots" content="INDEX,NOFOLLOW" />
     </head>
     <body>
-        <script>
-            window.location = "portero.php";
-        </script>
+        dashboard...
     </body>
 </html>
