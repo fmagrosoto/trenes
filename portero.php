@@ -1,8 +1,46 @@
 <?php
+include 'libreria/php/principal.php';
 
 if(isset($_GET['accion']) && $_GET['accion'] == 'cerrarSesion'){
     session_destroy();
     header("Location: portero.php");
+    exit;
+}
+
+if(isset($_POST['submit'])){
+    $usuario = $_POST['usuario'];
+    $password = $_POST['password'];
+    
+    $query = "SELECT id, nombre, apellidos, usuario, pwd
+        FROM tbl_usuarios
+        WHERE usuario = '$usuario' AND pwd = '$password'";
+    $result = mysql_query($query) or die(mysql_error());
+    $datos = mysql_fetch_array($result);
+    $numDatos = mysql_num_rows($result);
+    
+    if($numDatos != 0){
+        $_SESSION['pdvAcceso'] = true;
+        $_SESSION['Nusuario'] = utf8_encode($datos['nombre'])." ".utf8_encode($datos['apellidos']);
+        $_SESSION['IDusuario'] = $datos['id'];
+        $idusuario = $_SESSION['IDusuario'];
+        $ip = $_SERVER['REMOTE_ADDR'];
+        
+        // log de accesos
+        $qlog = "INSERT INTO tbl_accesos
+            (usuario, ip, fecha)
+            VALUES
+            ('$idusuario','$ip', NOW())";
+        mysql_query($qlog) or die(mysql_error());
+        
+    } else {
+        header("Location: portero.php?mensaje=error");
+        exit;
+    }
+    
+}
+
+if(isset($_SESSION['pdvAcceso'])){
+    header("Location: dashboard.php");
     exit;
 }
 
@@ -49,7 +87,9 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'cerrarSesion'){
                 </script>
                 <?php } ?>
                 <div id="inicioSesion">
-                    <form>
+                    <form name="iniciarSesion"
+                          method="POST"
+                          action="portero.php">
                         <fieldset>
                             <legend>Introduzca los datos de usuario</legend>
                             <div>

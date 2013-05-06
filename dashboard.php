@@ -1,3 +1,7 @@
+<?php
+include 'libreria/php/principal.php';
+restricionAcceso();
+?>
 <!DOCTYPE html>
 <html lang="es-MX">
     <head>
@@ -30,6 +34,7 @@
                 <ul>
                     <li><a href="venta.php">Nueva venta</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
+                    <li>| <em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             
@@ -49,7 +54,7 @@
                         </thead>
                         <tfoot>
                             <tr>
-                                <td colspan="3">Actividades del usuario: <em>[nombre de usuario]</em></td>
+                                <td colspan="3">Actividades del usuario: <em><?php echo $_SESSION['Nusuario']; ?></em></td>
                             </tr>
                         </tfoot>
                         <tbody>

@@ -1,3 +1,9 @@
+<?php
+include 'libreria/php/principal.php';
+
+restricionAcceso();
+
+?>
 <!DOCTYPE html>
 <html lang="es-MX">
     <head>
@@ -30,6 +36,7 @@
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
+                    <li>| <em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             
