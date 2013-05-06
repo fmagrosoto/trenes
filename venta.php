@@ -3,6 +3,89 @@ include 'libreria/php/principal.php';
 
 restricionAcceso();
 
+// CANCELAR cuenta
+if(isset($_GET['accion']) && $_GET['accion'] == 'cancelar'){
+    $cuenta = $_GET['cuenta'];
+    $queryCancelar = "UPDATE tbl_venta SET status=3 WHERE id='$cuenta'";
+    mysql_query($queryCancelar) or die(mysql_error());
+    header("Location: venta.php");
+    exit;
+}
+
+// REALIZAR venta
+if(isset($_GET['accion']) && $_GET['accion'] == 'realizar'){
+    $cuenta = $_GET['cuenta'];
+    $queryCancelar = "UPDATE tbl_venta SET status=2 WHERE id='$cuenta'";
+    mysql_query($queryCancelar) or die(mysql_error());
+    header("Location: venta_realizada.php?accion=realizada");
+    exit;
+}
+
+// AGREGAR producto
+if(isset($_GET['accion']) && $_GET['accion'] == 'agregar'){
+    $personas = $_GET['personas'];
+    $importe = $_GET['importe'];
+    $concepto = $_GET['concepto'];
+    $cuenta = $_GET['cuenta'];
+    $IDusuario = $_SESSION['IDusuario'];
+    
+    if($cuenta == 'nueva'){ // crear nueva cuenta
+        
+        $queryNueva = "INSERT INTO tbl_venta
+            (usuario, total, status, fecha)
+            VALUES
+            ('$IDusuario', '0.00', 1, NOW())";
+        mysql_query($queryNueva) or die(mysql_error());
+        $cuenta = mysql_insert_id();
+        
+        
+    }
+    
+    // Agregar producto
+    $queryAgregar = "INSERT INTO tbl_productos_venta
+            (venta, concepto, importe, personas)
+            VALUES
+            ('$cuenta', '$concepto', '$importe', '$personas')";
+    mysql_query($queryAgregar) or die(mysql_error());
+    
+    // Actualizar cuenta
+    $queryTotal = "SELECT total FROM tbl_venta WHERE id = '$cuenta'";
+    $resultTotal = mysql_query($queryTotal) or die(mysql_error());
+    $datosTotal = mysql_fetch_array($resultTotal);
+    
+    $total = $datosTotal['total'];
+    $nuevoTotal = $total + $importe;
+    
+    $queryActualizar = "UPDATE tbl_venta SET total = '$nuevoTotal' WHERE id = '$cuenta'";
+    mysql_query($queryActualizar) or die(mysql_error());
+    
+    // enviar a la página de ventas con la venta agregada
+    header("Location: venta.php?accion=agregado&cuenta=$cuenta");
+    exit;
+}
+
+// Revisar la cuenta
+if(isset($_GET['cuenta'])){
+    $cuenta = $_GET['cuenta'];
+} else {
+    $cuenta = 'nueva';
+}
+
+// Extraer tabla de productos
+$queryTabla = "SELECT * FROM tbl_productos_venta WHERE venta = '$cuenta'";
+$resultTabla = mysql_query($queryTabla) or die(mysql_error());
+$datosTabla = mysql_fetch_array($resultTabla);
+
+// Extraer total de la cuenta
+$queryTcuenta = "SELECT total FROM tbl_venta WHERE id = '$cuenta'";
+$resultTcuenta = mysql_query($queryTcuenta) or die(mysql_error());
+$datosTcuenta = mysql_fetch_array($resultTcuenta);
+
+// Extraer lista de precios
+$queryPrecios = "SELECT * FROM tbl_precios ORDER BY id";
+$resultPrecios = mysql_query($queryPrecios) or die(mysql_error());
+$datosPrecios = mysql_fetch_array($resultPrecios);
+
 ?>
 <!DOCTYPE html>
 <html lang="es-MX">
@@ -48,64 +131,62 @@ restricionAcceso();
                 
                 <div class="doble-columna">
                     <div class="botones">
+                        <?php do { ?>
                         <div>
                             <button type="button"
                                     name="1persona"
-                                    id="1persona"
-                                    class="boton-ventas">1 persona - [$00.00]</button>
+                                    class="boton-ventas"
+                                    onclick="agregarProducto('<?php echo $datosPrecios['personas']; ?>','<?php echo $datosPrecios['importe']; ?>','<?php echo utf8_encode($datosPrecios['concepto']); ?>','<?php echo $cuenta ?>');"><?php echo utf8_encode($datosPrecios['concepto']). "<br />$ ".$datosPrecios['importe']; ?></button>
                         </div>
-                        <div>
-                            <button type="button"
-                                    name="2personas"
-                                    id="2personas"
-                                    class="boton-ventas">2 personas - [$00.00]</button>
-                        </div>
-                        <div>
-                            <button type="button"
-                                    name="3personas"
-                                    id="3personas"
-                                    class="boton-ventas">3 personas - [$00.00]</button>
-                        </div>
-                        <div>
-                            <button type="button"
-                                    name="4personas"
-                                    id="4personas"
-                                    class="boton-ventas">Pase familiar - [$00.00]</button>
-                        </div>
+                        <?php } while ($datosPrecios = mysql_fetch_array($resultPrecios));?>
                     </div>
                     <div class="cuenta">
                         <div id="mostrar-cuenta">
                             <p>31 de septiembre de 2013 - 10:55:55</p>
                             <hr />
-                            <p>Venta hecha por: <em>[nombre de vendedor]</em></p>
-                            <p>Venta No: <em>[No de venta]</em></p>
+                            <p>Venta hecha por: <em><?php echo $_SESSION['Nusuario'] ?></em></p>
                             <hr />
-                            <table class="tabla-cuenta">
-                                <tr>
-                                    <td>1 pase individual =></td>
-                                    <td class="precio">$ 00.00</td>
-                                </tr>
-                                <tr>
-                                    <td>1 pase doble =></td>
-                                    <td class="precio">$ 00.00</td>
-                                </tr>
-                            </table>
-                            <hr />
-                            <table class="tabla-cuenta">
-                                <tr>
-                                    <td>Total de la cuenta:</td>
-                                    <td class="precio">$ 1000.00</td>
-                                </tr>
-                            </table>
-                            <hr />
+                            
+                            <div class="tabla-de-cuentas">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Concepto</th>
+                                            <th>Importe</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total de la cuenta</td>
+                                            <td>$ <?php echo $datosTcuenta['total'] ?></td>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <?php do { ?>
+                                        <tr>
+                                            <td><?php echo utf8_encode($datosTabla['concepto']); ?></td>
+                                            <td>$ <?php echo $datosTabla['importe']; ?></td>
+                                        </tr>
+                                        <?php } while ($datosTabla = mysql_fetch_array($resultTabla)); ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr style="clear: both;" />
+
                         </div>
                         <div class="mas-botones">
                             <button type="button"
                                     name="cerraVenta"
-                                    class="botonesVenta">Cerrar venta</button>
+                                    id="cerrarVenta"
+                                    class="botonesVenta"
+                                    onclick="cerrarVenta('<?php echo $cuenta; ?>');"
+                                    disabled>Cerrar venta</button>
                             <button type="button"
                                     name="cancelarVenta"
-                                    class="botonesVenta">Cancelar venta</button>
+                                    id="cancelarVenta"
+                                    class="botonesVenta"
+                                    onclick="cancelarCuenta('<?php echo $cuenta; ?>');"
+                                    disabled>Cancelar venta</button>
                         </div>
                     </div>
                 </div>
@@ -133,5 +214,11 @@ restricionAcceso();
             
         </div>
         <!-- fin WRAPPER -->
+        <?php if(isset($_GET['accion']) && $_GET['accion'] == 'agregado') { ?>
+        <script>
+            document.getElementById('cerrarVenta').disabled = false;
+            document.getElementById('cancelarVenta').disabled = false;
+        </script>
+        <?php } ?>
     </body>
 </html>

@@ -232,6 +232,11 @@ nav ul li a:hover {
     cursor: pointer;
     background-color: #ff6600;
 }
+.doble-columna .botonesVenta:disabled {
+    background-color: rgb(240,240,240);
+    color: rgb(175,175,175);
+    text-shadow: 1px 1px 2px white;
+}
 
 .doble-columna .cuenta {
     float: right;
@@ -249,15 +254,30 @@ nav ul li a:hover {
     margin: 0;
     padding: 0;
 }
-.doble-columna .cuenta #mostrar-cuenta .tabla-cuenta {
-    width: 100%;
+
+.tabla-de-cuentas {
+    float: right;
+    margin-bottom: 20px;
 }
-.doble-columna .cuenta #mostrar-cuenta .tabla-cuenta td {
-    text-align: right;
+
+.tabla-de-cuentas table thead th {
+    background-color: rgba(245,245,245,.5);
+    border: 1px lightgray dotted;
+    padding: 5px 10px;
 }
-.doble-columna .cuenta #mostrar-cuenta .tabla-cuenta .precio {
-    width: 100px;
+.tabla-de-cuentas table tfoot td {
+    background-color: rgba(245,245,245,.5);
+    border: 1px lightgray dotted;
+    padding: 5px 10px;
+    font-weight: 700;
+    color: red;
 }
+.tabla-de-cuentas table tbody td {
+    background-color: rgba(245,245,245,.2);
+    border: 1px lightgray dotted;
+    padding: 5px 10px;
+}
+
 .mas-botones {
     margin-top: 15px;
 }

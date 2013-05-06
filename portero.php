@@ -11,9 +11,9 @@ if(isset($_POST['submit'])){
     $usuario = $_POST['usuario'];
     $password = $_POST['password'];
     
-    $query = "SELECT id, nombre, apellidos, usuario, pwd
+    $query = "SELECT id, nombre, apellidos, usuario, password
         FROM tbl_usuarios
-        WHERE usuario = '$usuario' AND pwd = '$password'";
+        WHERE usuario = '$usuario' AND password = '$password'";
     $result = mysql_query($query) or die(mysql_error());
     $datos = mysql_fetch_array($result);
     $numDatos = mysql_num_rows($result);

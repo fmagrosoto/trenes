@@ -14,3 +14,20 @@ var nimbus = function(){
 var nuevaVenta = function(){
     window.location = "venta.php";
 };
+
+
+var agregarProducto = function(personas, importe, concepto, cuenta){
+    window.location = "venta.php?accion=agregar&personas="+personas+"&importe="+importe+"&concepto="+concepto+"&cuenta="+cuenta;
+};
+
+var cancelarCuenta = function(cuenta){
+    if(confirm('¿Está seguro de querer CANCELAR la cuenta?')){
+        window.location = "venta.php?accion=cancelar&cuenta="+cuenta;
+    }
+}
+
+var cerrarVenta = function(cuenta){
+    if(confirm('¿Está seguro de querer REALIZAR la venta?')){
+        window.location = "venta.php?accion=realizar&cuenta="+cuenta;
+    }
+}
