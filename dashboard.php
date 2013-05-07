@@ -1,6 +1,23 @@
 <?php
 include 'libreria/php/principal.php';
 restricionAcceso();
+$usuario = $_SESSION['IDusuario'];
+
+// EXTRAER número de ventas
+$queryVentas = "SELECT COUNT(id) AS ventas FROM tbl_venta
+    WHERE usuario = '$usuario' AND status = 2";
+$resultVentas = mysql_query($queryVentas) or die(mysql_error());
+$datosVentas = mysql_fetch_array($resultVentas);
+$numVentas = $datosVentas['ventas'];
+
+// EXTRAER importe de ventas
+$queryImporte = "SELECT SUM(total) AS importe FROM tbl_venta
+    WHERE usuario = '$usuario' AND status = 2";
+$resultImporte = mysql_query($queryImporte) or die(mysql_error());
+$datosImporte = mysql_fetch_array($resultImporte);
+$importeVentas = $datosImporte['importe'];
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es-MX">
@@ -60,17 +77,12 @@ restricionAcceso();
                         <tbody>
                             <tr>
                                 <td>Ventas realizadas</td>
-                                <td><span>[num]</span></td>
+                                <td><span>$ <?php echo $importeVentas; ?></span></td>
                                 <td class="acciones"><a href="">Ver detalles</a></td>
                             </tr>
                             <tr>
                                 <td>No. de boletos vendidos</td>
-                                <td><span>[num]</span></td>
-                                <td class="acciones"><a href="">Ver detalles</a></td>
-                            </tr>
-                            <tr>
-                                <td>No. de personas que han viajado en el tren</td>
-                                <td><span>[num]</span></td>
+                                <td><span><?php echo $numVentas; ?></span></td>
                                 <td class="acciones"><a href="">Ver detalles</a></td>
                             </tr>
                         </tbody>

@@ -17,7 +17,7 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'realizar'){
     $cuenta = $_GET['cuenta'];
     $queryCancelar = "UPDATE tbl_venta SET status=2 WHERE id='$cuenta'";
     mysql_query($queryCancelar) or die(mysql_error());
-    header("Location: venta_realizada.php?accion=realizada");
+    header("Location: venta_realizada.php?accion=realizada&cuenta=$cuenta");
     exit;
 }
 
@@ -37,8 +37,6 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'agregar'){
             ('$IDusuario', '0.00', 1, NOW())";
         mysql_query($queryNueva) or die(mysql_error());
         $cuenta = mysql_insert_id();
-        
-        
     }
     
     // Agregar producto
@@ -77,14 +75,24 @@ $resultTabla = mysql_query($queryTabla) or die(mysql_error());
 $datosTabla = mysql_fetch_array($resultTabla);
 
 // Extraer total de la cuenta
-$queryTcuenta = "SELECT total FROM tbl_venta WHERE id = '$cuenta'";
+$queryTcuenta = "SELECT total, status FROM tbl_venta WHERE id = '$cuenta'";
 $resultTcuenta = mysql_query($queryTcuenta) or die(mysql_error());
 $datosTcuenta = mysql_fetch_array($resultTcuenta);
+$numdatosTcuenta = mysql_num_rows($resultTcuenta);
+
+if($numdatosTcuenta != 0){
+    if($datosTcuenta['status'] != 1){
+        header("Location: venta.php");
+        exit;
+    }
+}
 
 // Extraer lista de precios
 $queryPrecios = "SELECT * FROM tbl_precios ORDER BY id";
 $resultPrecios = mysql_query($queryPrecios) or die(mysql_error());
 $datosPrecios = mysql_fetch_array($resultPrecios);
+
+$hoy = date("Y-m-d H:i:s");
 
 ?>
 <!DOCTYPE html>
@@ -142,7 +150,7 @@ $datosPrecios = mysql_fetch_array($resultPrecios);
                     </div>
                     <div class="cuenta">
                         <div id="mostrar-cuenta">
-                            <p>31 de septiembre de 2013 - 10:55:55</p>
+                            <p><?php echo mostrarFechaH($hoy, 1) ?></p>
                             <hr />
                             <p>Venta hecha por: <em><?php echo $_SESSION['Nusuario'] ?></em></p>
                             <hr />

@@ -24,10 +24,14 @@ var cancelarCuenta = function(cuenta){
     if(confirm('¿Está seguro de querer CANCELAR la cuenta?')){
         window.location = "venta.php?accion=cancelar&cuenta="+cuenta;
     }
-}
+};
 
 var cerrarVenta = function(cuenta){
     if(confirm('¿Está seguro de querer REALIZAR la venta?')){
         window.location = "venta.php?accion=realizar&cuenta="+cuenta;
     }
-}
+};
+
+var imprimir = function(){
+  alert('Próximamente; hace falta hacer pruebas con la impresora térmica.')  
+};

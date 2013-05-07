@@ -281,6 +281,34 @@ nav ul li a:hover {
 .mas-botones {
     margin-top: 15px;
 }
+
+.ver-venta {
+    margin-bottom: 20px;
+}
+
+.ver-venta td {
+    background-color: rgba(245,245,245,.5);
+    border: 1px lightgray dotted;
+    padding: 5px 10px;
+}
+
+.ver-productos {
+    margin-bottom: 20px;
+}
+
+.ver-productos thead th, .ver-productos tfoot td {
+    background-color: rgba(255,245,245,.5);
+    padding: 5px 10px;
+    border: 1px lightgray dotted;
+}
+.ver-productos tfoot td {
+    color: red;
+}
+.ver-productos tbody td {
+    background-color: rgba(245,255,245,.5);
+    padding: 5px 10px;
+    border: 1px lightgray dotted;
+}
 /* ----- */
 
 footer {

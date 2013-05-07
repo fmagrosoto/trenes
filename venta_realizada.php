@@ -3,7 +3,38 @@ include 'libreria/php/principal.php';
 
 restricionAcceso();
 
-
+// EXTRAER información de la cuenta
+if(isset($_GET['accion']) && $_GET['accion'] == 'realizada'){
+    if(isset($_GET['cuenta'])){
+        $cuenta = $_GET['cuenta'];
+        
+        $queryX = "SELECT * FROM tbl_venta WHERE id = '$cuenta'";
+        $resultX = mysql_query($queryX) or die(mysql_error());
+        $datosX = mysql_fetch_array($resultX);
+        $numDatosX = mysql_num_rows($resultX);
+        
+        $queryP = "SELECT * FROM tbl_productos_venta WHERE venta = '$cuenta'";
+        $resP = mysql_query($queryP) or die(mysql_error());
+        $datosP = mysql_fetch_array($resP);
+        
+        if($numDatosX == 0){
+            header("Location: dashboard.php?error=nohayregistro");
+            exit;
+        } else {
+            if($datosX['status'] != 2){
+                header("Location: dashboard.php?error=noesventa");
+                exit;
+            }
+        }
+        
+    } else {
+        header("Location: dashboard.php");
+        exit;
+    }
+} else {
+    header("Location: dashboard.php");
+    exit;
+}
 
 ?>
 <!DOCTYPE html>
@@ -48,7 +79,50 @@ restricionAcceso();
                     <h2>Venta realizada con éxito</h2>
                 </div>
                 
+                <table class="ver-venta">
+                    <tr>
+                        <td>Venta realizada por: <?php echo nombreUsuario($datosX['usuario']); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Fecha: <?php echo mostrarFechaH($datosX['fecha'], 1) ?></td>
+                    </tr>
+                    <tr>
+                        <td>Venta No: <?php echo $datosX['id'] ?></td>
+                    </tr>
+                </table>
                 
+                <table class="ver-productos">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Importe</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td>Total de la venta:</td>
+                            <td>$ <?php echo $datosX['total'] ?></td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?php do { ?>
+                        <tr>
+                            <td><?php echo utf8_encode($datosP['concepto']) ?></td>
+                            <td>$ <?php echo $datosP['importe']; ?></td>
+                        </tr>
+                        <?php } while ($datosP = mysql_fetch_array($resP)); ?>
+                    </tbody>
+                </table>
+                
+                <hr />
+                <div>
+                    <button type="button"
+                            name="nueva-venta"
+                            onclick="nuevaVenta();">Nueva venta</button>
+                    <button type="button"
+                            name="imprimir"
+                            onclick="imprimir();">Imprimir recibo</button>
+                </div>
                 
             </section>
             <!-- fin CUERPO -->
