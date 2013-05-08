@@ -3,37 +3,57 @@ include 'libreria/php/principal.php';
 
 restricionAcceso();
 
-// EXTRAER información de la cuenta
-if(isset($_GET['accion']) && $_GET['accion'] == 'realizada'){
-    if(isset($_GET['cuenta'])){
-        $cuenta = $_GET['cuenta'];
+$fecha = date("Y-m-d");
+$hora = date("H:i:s");
+$hoy = $fecha. " " .$hora;
+$usuario = $_SESSION['IDusuario'];
+
+// EXTRAER informaciónde la venta
+$queryVentas = "SELECT id, total FROM tbl_venta WHERE usuario = '$usuario' AND fecha LIKE '$fecha%'";
+$resultVentas = mysql_query($queryVentas) or die(mysql_error());
+$datosVentas = mysql_fetch_array($resultVentas);
+$numDatosVentas = mysql_num_rows($resultVentas);
+
+$queryTotales = "SELECT SUM(total) AS totales FROM tbl_venta WHERE usuario = '$usuario' AND fecha LIKE '$fecha%'";
+$resultTotales = mysql_query($queryTotales) or die(mysql_error());
+$datosTotales = mysql_fetch_array($resultTotales);
+
+/*
+ * EXTRAER NÚMERO DE PERSONAS DE UNA CUENTA
+ * 
+ * Extracción del número de personas de una cuenta pasada como parámetro
+ */
+function mostrarNumPersonas($venta){
+    $query = "SELECT SUM( personas ) AS personas
+FROM tbl_productos_venta
+WHERE venta = '$venta'";
+    $result = mysql_query($query) or die(mysql_error());
+    $datos = mysql_fetch_array($result);
+    return $datos['personas'];
+}
+
+function numUsuarios($usuario, $fecha){
+    $cuenta = 0;
+    
+    $queryVentas = "SELECT id FROM tbl_venta WHERE usuario = '$usuario' AND fecha LIKE '$fecha%'";
+    $resultVentas = mysql_query($queryVentas) or die(mysql_error());
+    $datosVentas = mysql_fetch_array($resultVentas);
+    
+    do {
         
-        $queryX = "SELECT * FROM tbl_venta WHERE id = '$cuenta'";
-        $resultX = mysql_query($queryX) or die(mysql_error());
-        $datosX = mysql_fetch_array($resultX);
-        $numDatosX = mysql_num_rows($resultX);
+        $venta = $datosVentas['id'];
+        $query = "SELECT SUM( personas ) AS personas FROM tbl_productos_venta
+            WHERE venta = '$venta'";
+        $result = mysql_query($query) or die(mysql_error());
+        $datos = mysql_fetch_array($result);
         
-        $queryP = "SELECT * FROM tbl_productos_venta WHERE venta = '$cuenta'";
-        $resP = mysql_query($queryP) or die(mysql_error());
-        $datosP = mysql_fetch_array($resP);
+        $suma = $datos['personas'];
+        $cuenta += $suma;
         
-        if($numDatosX == 0){
-            header("Location: dashboard.php?error=nohayregistro");
-            exit;
-        } else {
-            if($datosX['status'] != 2){
-                header("Location: dashboard.php?error=noesventa");
-                exit;
-            }
-        }
-        
-    } else {
-        header("Location: dashboard.php");
-        exit;
-    }
-} else {
-    header("Location: dashboard.php");
-    exit;
+    } while($datosVentas = mysql_fetch_array($resultVentas));
+    
+
+    return $cuenta;
 }
 
 ?>
@@ -48,14 +68,13 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'realizada'){
               nimbus, digitae" />
         <meta name="robots" content="INDEX,NOFOLLOW" />
         <link rel="stylesheet" type="text/css" href="css/principal.css" />
-        <link rel="stylesheet" type="text/css" href="css/impresion.css" media="print" />
         <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
         <script src="libreria/js/interno.js"></script>
     </head>
     <!-- Gracias por ver nuestro código
     Este sitio está hecho en HTML5.
     Desarrollado por Fernando Magrosoto V. - info@fmagrosoto.com -->
-    <body onload="imprimir();">
+    <body>
         <!-- área del WRAPPER -->
         <div id="contenedor-principal">
             
@@ -77,52 +96,42 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'realizada'){
             <!-- ZONA DEL CUERPO -->
             <section>
                 <div class="titulo">
-                    <h2>Venta realizada con éxito</h2>
+                    <h2>Detalles de venta del día</h2>
                 </div>
                 
-                <table class="ver-venta">
-                    <tr>
-                        <td>Venta realizada por: <?php echo nombreUsuario($datosX['usuario']); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Fecha: <?php echo mostrarFechaH($datosX['fecha'], 1) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Venta No: <?php echo $datosX['id'] ?></td>
-                    </tr>
-                </table>
+                <div class="fecha">Fecha: <?php echo mostrarFechaH($hoy, 1) ?></div>
                 
-                <table class="ver-productos">
+                <table class="detalles">
                     <thead>
                         <tr>
-                            <th>Concepto</th>
+                            <th>ID de venta</th>
                             <th>Importe</th>
+                            <th>No. de personas</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <td>Total:</td>
-                            <td>$ <?php echo $datosX['total'] ?></td>
+                            <td><?php echo $numDatosVentas; ?> ventas</td>
+                            <td>Total $ <?php echo number_format($datosTotales['totales'], 2); ?></td>
+                            <td><?php echo numUsuarios($usuario, $fecha); ?> usuarios del tren</td>
                         </tr>
                     </tfoot>
                     <tbody>
                         <?php do { ?>
                         <tr>
-                            <td><?php echo utf8_encode($datosP['concepto']) ?></td>
-                            <td>$ <?php echo $datosP['importe']; ?></td>
+                            <td><?php echo $datosVentas['id'] ?></td>
+                            <td>$ <?php echo $datosVentas['total'] ?></td>
+                            <td><?php echo mostrarNumPersonas($datosVentas['id']) ?></td>
                         </tr>
-                        <?php } while ($datosP = mysql_fetch_array($resP)); ?>
+                        <?php } while ($datosVentas = mysql_fetch_array($resultVentas)); ?>
                     </tbody>
                 </table>
                 
                 <hr />
-                <div class="botones-bottom">
+                <div>
                     <button type="button"
                             name="nueva-venta"
                             onclick="nuevaVenta();">Nueva venta</button>
-                    <button type="button"
-                            name="imprimir"
-                            onclick="imprimir();">Imprimir recibo</button>
                 </div>
                 
             </section>

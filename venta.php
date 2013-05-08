@@ -127,7 +127,7 @@ $hoy = date("Y-m-d H:i:s");
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
-                    <li>| <em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
+                    <li><em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             

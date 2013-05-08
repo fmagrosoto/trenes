@@ -33,5 +33,6 @@ var cerrarVenta = function(cuenta){
 };
 
 var imprimir = function(){
-  alert('Próximamente; hace falta hacer pruebas con la impresora térmica.')  
+  // alert('Próximamente; hace falta hacer pruebas con la impresora térmica.')
+  window.print();
 };

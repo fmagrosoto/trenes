@@ -3,19 +3,21 @@ include 'libreria/php/principal.php';
 restricionAcceso();
 $usuario = $_SESSION['IDusuario'];
 
+$fecha = date("Y-m-d");
+
 // EXTRAER número de ventas
 $queryVentas = "SELECT COUNT(id) AS ventas FROM tbl_venta
-    WHERE usuario = '$usuario' AND status = 2";
+    WHERE usuario = '$usuario' AND status = 2 AND fecha LIKE '$fecha%'";
 $resultVentas = mysql_query($queryVentas) or die(mysql_error());
 $datosVentas = mysql_fetch_array($resultVentas);
 $numVentas = $datosVentas['ventas'];
 
 // EXTRAER importe de ventas
 $queryImporte = "SELECT SUM(total) AS importe FROM tbl_venta
-    WHERE usuario = '$usuario' AND status = 2";
+    WHERE usuario = '$usuario' AND status = 2 AND fecha LIKE '$fecha%'";
 $resultImporte = mysql_query($queryImporte) or die(mysql_error());
 $datosImporte = mysql_fetch_array($resultImporte);
-$importeVentas = $datosImporte['importe'];
+$importeVentas = number_format($datosImporte['importe'],2);
 
 
 ?>
@@ -51,7 +53,7 @@ $importeVentas = $datosImporte['importe'];
                 <ul>
                     <li><a href="venta.php">Nueva venta</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
-                    <li>| <em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
+                    <li><em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             
@@ -78,12 +80,12 @@ $importeVentas = $datosImporte['importe'];
                             <tr>
                                 <td>Ventas realizadas</td>
                                 <td><span>$ <?php echo $importeVentas; ?></span></td>
-                                <td class="acciones"><a href="">Ver detalles</a></td>
+                                <td class="acciones"><a href="detalles.php">Ver detalles</a></td>
                             </tr>
                             <tr>
                                 <td>No. de boletos vendidos</td>
                                 <td><span><?php echo $numVentas; ?></span></td>
-                                <td class="acciones"><a href="">Ver detalles</a></td>
+                                <td class="acciones"><a href="detalles.php">Ver detalles</a></td>
                             </tr>
                         </tbody>
                     </table>

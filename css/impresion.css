@@ -1,0 +1,129 @@
+/* 
+    Document   : principal
+    Created on : 5/05/2013, 02:29:28 PM
+    Author     : fmagrosoto
+    Description:
+        CSS para sistema punto de venta.
+*/
+
+body {
+    font-size: 100%;
+    background-color: white;
+    background-image: url('../imagenes/stripe.png');
+    background-position: left top;
+    background-repeat: repeat;
+    color: #333333;
+    font-family: 'Roboto Slab', serif;
+    font-weight: 400;
+}
+img {
+    border: none;
+}
+:focus {
+    outline: none;
+}
+hr {
+    border: none;
+    background-color: #ccc;
+    color: #ccc;
+    height: 1px;
+}
+#contenedor-principal {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    font-size: .75em;
+}
+
+header {
+    background-color: white;
+    padding: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: none;
+}
+header h1 {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: normal;
+    text-shadow: none;
+}
+
+/* CUERPO */
+section {
+    margin: 25px 0;
+    min-height: 0;;
+}
+
+nav {
+    display: none;
+}
+
+.titulo h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.25em; /* 20 / 16 */
+    border-bottom: none;
+    margin-bottom: 0;
+    text-shadow: none;
+}
+
+.espacio {
+    height: 25px;
+}
+
+.ver-venta {
+    margin-bottom: 0;
+}
+
+.ver-venta td {
+    background-color: white;
+    border: 0;
+    padding: 0;
+}
+
+.ver-productos {
+    margin-bottom: 0;
+}
+
+.ver-productos thead th, .ver-productos tfoot td {
+    background-color: white;
+    padding: 0;
+    border: none;
+}
+.ver-productos tfoot td {
+    color: black;
+}
+.ver-productos tbody td {
+    background-color: white;
+    padding: 0;
+    border: none;
+}
+
+.botones-bottom {
+    display: none;
+}
+/* ----- */
+
+footer {
+    background-color: white;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    font-size: medium;
+    overflow: auto;
+    color: black;
+    text-shadow: none;
+}
+footer p {
+    margin: 0;
+    padding: 0;
+}
+footer .legales {
+    float: left;
+}
+footer .creditos {
+    float: right;
+    display: none;
+}
