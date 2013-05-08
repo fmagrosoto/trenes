@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'openDB.php';
+date_default_timezone_set('America/Mexico_City');
 
 /*
  * FUNCION PARA RESTRINGIR EL ACCESO A LAS PÁGINAS INTERNAS

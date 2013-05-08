@@ -1,5 +1,6 @@
 <?php
 include 'libreria/php/principal.php';
+$hoy = date("Y-m-d H:i:s");
 
 restricionAcceso();
 
@@ -34,7 +35,7 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'agregar'){
         $queryNueva = "INSERT INTO tbl_venta
             (usuario, total, status, fecha)
             VALUES
-            ('$IDusuario', '0.00', 1, NOW())";
+            ('$IDusuario', '0.00', 1, '$hoy')";
         mysql_query($queryNueva) or die(mysql_error());
         $cuenta = mysql_insert_id();
     }
@@ -91,8 +92,6 @@ if($numdatosTcuenta != 0){
 $queryPrecios = "SELECT * FROM tbl_precios ORDER BY id";
 $resultPrecios = mysql_query($queryPrecios) or die(mysql_error());
 $datosPrecios = mysql_fetch_array($resultPrecios);
-
-$hoy = date("Y-m-d H:i:s");
 
 ?>
 <!DOCTYPE html>
