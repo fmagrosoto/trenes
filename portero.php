@@ -68,7 +68,7 @@ if(isset($_SESSION['pdvAcceso'])){
             
             <!-- ZONA DE ENCABEZADO -->
             <header>
-                <h1>Sistema PDV Tezontle Express</h1>
+                <h1><img src="imagenes/express.png" alt="" /></h1>
             </header>
             <!-- FIN ENCABEZADO -->
             

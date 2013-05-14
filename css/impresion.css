@@ -7,14 +7,10 @@
 */
 
 body {
-    font-size: 100%;
+    font-size: 10pt;
     background-color: white;
-    background-image: url('../imagenes/stripe.png');
-    background-position: left top;
-    background-repeat: repeat;
-    color: #333333;
-    font-family: 'Roboto Slab', serif;
-    font-weight: 400;
+    color: black;
+    font-family: monospace;
 }
 img {
     border: none;
@@ -32,7 +28,10 @@ hr {
     position: relative;
     width: 100%;
     margin: auto;
-    font-size: .75em;
+}
+
+.imgLogo {
+    width: 100%;
 }
 
 header {
@@ -45,7 +44,6 @@ header {
 header h1 {
     padding: 0;
     margin: 0;
-    font-size: 1.5em;
     font-weight: normal;
     text-shadow: none;
 }
@@ -53,7 +51,7 @@ header h1 {
 /* CUERPO */
 section {
     margin: 25px 0;
-    min-height: 0;;
+    min-height: 0;
 }
 
 nav {
@@ -63,30 +61,24 @@ nav {
 .titulo h2 {
     margin: 0;
     padding: 0;
-    font-size: 1.25em; /* 20 / 16 */
     border-bottom: none;
     margin-bottom: 0;
     text-shadow: none;
 }
-
 .espacio {
     height: 25px;
 }
-
 .ver-venta {
     margin-bottom: 0;
 }
-
 .ver-venta td {
     background-color: white;
     border: 0;
     padding: 0;
 }
-
 .ver-productos {
     margin-bottom: 0;
 }
-
 .ver-productos thead th, .ver-productos tfoot td {
     background-color: white;
     padding: 0;
@@ -104,6 +96,7 @@ nav {
 .botones-bottom {
     display: none;
 }
+
 /* ----- */
 
 footer {
@@ -111,7 +104,6 @@ footer {
     padding: 0;
     border-radius: 0;
     border: none;
-    font-size: medium;
     overflow: auto;
     color: black;
     text-shadow: none;

@@ -117,7 +117,7 @@ $datosPrecios = mysql_fetch_array($resultPrecios);
             
             <!-- ZONA DE ENCABEZADO -->
             <header>
-                <h1>Sistema PDV Tezontle Express</h1>
+                <h1><img src="imagenes/express.png" alt="" /></h1>
             </header>
             <!-- FIN ENCABEZADO -->
             
@@ -126,7 +126,7 @@ $datosPrecios = mysql_fetch_array($resultPrecios);
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
-                    <li><em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
+                    <li><em class="tip">Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             

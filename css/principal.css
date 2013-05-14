@@ -340,6 +340,21 @@ nav ul li a:hover {
     padding: 5px;
     border: 1px lightgray dotted;
 }
+.tip {
+    position: relative;
+    padding-left: 10px;
+}
+.tip:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #ffffff;
+    top: 7px;
+    left: 0;
+}
 /* ----- */
 
 footer {

@@ -44,7 +44,7 @@ $importeVentas = number_format($datosImporte['importe'],2);
             
             <!-- ZONA DE ENCABEZADO -->
             <header>
-                <h1>Sistema PDV Tezontle Express</h1>
+                <h1><img src="imagenes/express.png" alt="" /></h1>
             </header>
             <!-- FIN ENCABEZADO -->
             
@@ -53,7 +53,7 @@ $importeVentas = number_format($datosImporte['importe'],2);
                 <ul>
                     <li><a href="venta.php">Nueva venta</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
-                    <li><em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
+                    <li><em class="tip">Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             

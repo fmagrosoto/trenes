@@ -61,7 +61,7 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'realizada'){
             
             <!-- ZONA DE ENCABEZADO -->
             <header>
-                <h1>Sistema PDV Tezontle Express</h1>
+                <img class="imgLogo" src="imagenes/express.png" alt="" />
             </header>
             <!-- FIN ENCABEZADO -->
             
@@ -70,7 +70,7 @@ if(isset($_GET['accion']) && $_GET['accion'] == 'realizada'){
                 <ul>
                     <li><a href="dashboard.php">Dashboard</a></li>
                     <li><a href="portero.php?accion=cerrarSesion">Cerrar sesión</a></li>
-                    <li><em>Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
+                    <li><em class="tip">Usuario activo: <?php echo $_SESSION['Nusuario']; ?></em></li>
                 </ul>
             </nav>
             
